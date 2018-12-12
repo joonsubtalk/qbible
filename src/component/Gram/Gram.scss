@@ -1,0 +1,158 @@
+.c-gram {
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+
+    &__container {
+        max-width: 375px;
+    }
+    &__title {
+        padding: 1em;
+    }
+    &__imageContainer {
+        overflow: hidden;
+        position: relative;
+    }
+    &__text {
+        position: absolute;
+        color: white;
+        left: 50%;
+        top: 50%;
+        transform: translate(-50%,-50%);
+        width: 85%;
+        font-size: 1.25em;
+        font-weight: bold;
+        text-shadow: 1px 1px 5px black;
+        z-index: 10;
+    }
+    &__gradient {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        background: rgb(255,255,255);
+        background: linear-gradient(0deg, rgba(255,255,255,1) 0%, rgba(255,255,255,0) 45%);
+    }
+    &__image {
+        opacity: 0.85;
+        animation-name: zoom;
+        animation-duration: 16s;
+        animation-iteration-count: infinite;
+    }
+    &__seeMore {
+        padding: 1em;
+    }
+    &__loadingImage {
+        height: 20em;
+    }
+    &__loadingTextBar {
+        height: 2em;
+        width: 80%;
+    }
+}
+
+.c-gram--tiny {
+    .c-gram { //Namespace
+        &__text {
+            font-size: 2.5em;
+        }
+    }
+}
+
+.c-gram--small {
+    .c-gram { //Namespace
+        &__text {
+            font-size: 1.75em;
+        }
+    }
+}
+
+.c-gram--medium {
+    .c-gram { //Namespace
+        &__text {
+            font-size: 1.35em;
+            line-height: 1.4em;
+        }
+    }
+}
+
+.c-gram--long {
+    .c-gram { //Namespace
+        &__text {
+            font-size: 1em;
+            line-height: 1.5em;
+        }
+    }
+}
+
+.c-gram--font4 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Gamja Flower', cursive;
+            font-weight: normal;
+        }
+    }
+}
+
+.c-gram--font3 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Charmonman', cursive;
+            font-weight: normal;
+        }
+    }
+}
+
+.c-gram--font2 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Libre+Baskerville', serif;
+            font-weight: normal;
+        }
+    }
+}
+
+.c-gram--font1 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Slabo 27px', serif;
+            font-weight: normal;
+        }
+    }
+}
+
+.c-gram--font0 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Montserrat', sans-serif;
+            font-weight: normal;
+        }
+    }
+}
+
+@keyframes zoom {
+    0% { transform: scale(1.1); }
+    50% { transform: scale(1.3);}
+    100% { transform: scale(1.1); }
+    
+}
+
+.gradient {
+    animation-duration: .8s;
+    animation-fill-mode: forwards;
+    animation-iteration-count: infinite;
+    animation-name: placeHolderShimmer;
+    animation-timing-function: linear;
+    background: #f6f7f8;
+    background: linear-gradient(to right, #fafafa 8%, #e8e8e8 38%, #fafafa 54%);
+    background-size: 1000px 640px;
+    
+    position: relative;
+}
+
+@keyframes placeHolderShimmer{
+    0%{
+        background-position: -468px 0
+    }
+    100%{
+        background-position: 468px 0
+    }
+}
