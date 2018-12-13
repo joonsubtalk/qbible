@@ -1,5 +1,6 @@
 import { INCREMENT_VERSE,
 	DECREMENT_VERSE,
+	SET_VERSE,
 	ADD_POST,
 	GET_PIC_SUCCESS,
 	GET_PIC_REQUEST,
@@ -47,6 +48,18 @@ function postsRD(state = defaultState , action ) {
 				...state,
 				post: state.post.map((single, i) => i === action.payload && state.post[action.payload].verse > 1
 					? {...single, verse: state.post[action.payload].verse-1}
+					: single
+				)
+			}
+
+		}
+
+		case SET_VERSE: {
+			console.log('hi')
+			return {
+				...state,
+				post: state.post.map((single, i) => i === action.payload.id
+					? {...single, verse: action.payload.verse}
 					: single
 				)
 			}

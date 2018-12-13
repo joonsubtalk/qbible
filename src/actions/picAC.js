@@ -43,6 +43,7 @@ export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch)
 			return dispatch(getPictureSuccess({id:payload.id, pic: data.url}));
 		})
 		.catch((error) => {
+			console.log('fail');
 			// return dispatch(getBibleFailure());
 		});
 

@@ -1,5 +1,6 @@
 import { INCREMENT_VERSE,
-	DECREMENT_VERSE } from '../config/actionTypes';
+	DECREMENT_VERSE,
+	SET_VERSE } from '../config/actionTypes';
 
 export const incrementVerse = (payload) => {
 
@@ -14,6 +15,15 @@ export const decrementVerse = (payload) => {
 
 	return {
 		type : DECREMENT_VERSE,
+		payload
+	};
+
+};
+
+export const setVerse = (payload) => {
+
+	return {
+		type : SET_VERSE,
 		payload
 	};
 

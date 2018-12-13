@@ -41,12 +41,33 @@
         padding: 1em;
     }
     &__loadingImage {
-        height: 20em;
+        height: 25em;
     }
     &__loadingTextBar {
         height: 2em;
         width: 80%;
     }
+    &__verse {
+        font-size: .85em;
+        vertical-align: super;
+    }
+    &__context {
+        display: none;
+    }
+}
+
+.c-gram--showContext {
+    .c-gram {
+        &__context {
+            display: block;
+            overflow: auto;
+            height: 15em;
+        }
+    }
+}
+
+.c-gram--current {
+    background-color: #ffffa4;
 }
 
 .c-gram--tiny {
@@ -83,10 +104,19 @@
     }
 }
 
+.c-gram--font5 {
+    .c-gram { //Namespace
+        &__text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: normal;
+        }
+    }
+}
+
 .c-gram--font4 {
     .c-gram { //Namespace
         &__text {
-            font-family: 'Gamja Flower', cursive;
+            font-family: 'Caveat Brush', cursive;
             font-weight: normal;
         }
     }
@@ -113,8 +143,8 @@
 .c-gram--font1 {
     .c-gram { //Namespace
         &__text {
-            font-family: 'Slabo 27px', serif;
-            font-weight: normal;
+            font-family: 'Lato', sans-serif;
+            font-weight: bold;
         }
     }
 }

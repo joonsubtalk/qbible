@@ -43,7 +43,7 @@ class App extends Component {
       : '';
 
     this.props.addPost(text);
-    this.props.getPicture(text, query);
+    this.props.getPicture({id: 0, query: query });
   }
 
   loadBibleVariables = () => {

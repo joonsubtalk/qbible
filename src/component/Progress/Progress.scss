@@ -33,5 +33,41 @@
         height: $SIZE;
         background-color: white;
         opacity: 0.25;
+        border-radius: 50%;
+    }
+}
+
+.c-progress--0 {
+    .c-progress__item:first-child .c-progress__content,
+    .c-progress__item:first-child .c-progress__circles {
+        opacity: 1;
+    }
+}
+
+.c-progress--1 {
+    .c-progress__item:nth-child(2) .c-progress__content,
+    .c-progress__item:nth-child(2) .c-progress__circles {
+        opacity: 1;
+    }
+}
+
+.c-progress--2 {
+    .c-progress__item:nth-child(3) .c-progress__content,
+    .c-progress__item:nth-child(3) .c-progress__circles {
+        opacity: 1;
+    }
+}
+
+.c-progress--3 {
+    .c-progress__item:nth-child(4) .c-progress__content,
+    .c-progress__item:nth-child(4) .c-progress__circles {
+        opacity: 1;
+    }
+}
+
+.c-progress--4 {
+    .c-progress__item:last-child .c-progress__content,
+    .c-progress__item:last-child .c-progress__circles {
+        opacity: 1;
     }
 }
