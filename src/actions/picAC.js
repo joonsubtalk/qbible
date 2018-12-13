@@ -30,9 +30,16 @@ export const getPictureFailure = (payload) => {
 
 };
 
+/*
+payload:
+	book,
+	chapter,
+	verse,
+	query: query,
+*/
 export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch) {
 
-	dispatch(getPictureRequest(payload.id));
+	dispatch(getPictureRequest());
 
 	const height = Math.floor(400);
 	const width = Math.floor(400);
@@ -40,7 +47,8 @@ export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch)
 
 	return fetch(url)
 		.then((data) => {
-			return dispatch(getPictureSuccess({id:payload.id, pic: data.url}));
+			const {book, chapter, verse, query} = payload;
+			return dispatch(getPictureSuccess({book, chapter, verse, query, pic: data.url}));
 		})
 		.catch((error) => {
 			console.log('fail');

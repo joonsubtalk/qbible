@@ -1,3 +1,30 @@
+export const READ_PLAN = [
+    {'book':'Genesis','chapter': 1,'verse': 1,'activeVerse': 1},
+    {'book':'Proverbs','chapter': 1,'verse': 1,'activeVerse': 1},
+    {'book':'Matthew','chapter': 1,'verse': 1,'activeVerse': 1}
+]
+export const WITTY_LOADER = [
+    'rendering new mercies',
+    'awaiting the second coming',
+    'deleting anxiousness',
+    'examinging the heart',
+    'praying for an extra byte',
+    'choosing filters for verses',
+    'waiting for appointed time',
+    'decrypting utterances',
+    'electing database',
+    'seeking kingdom 1.0',
+    'lifting praise v1.0',
+    'watching dispensationalism and covenant debates',
+    'polishing memory verses',
+    'purchasing sunday coffee',
+    'filling database with holy spirit',
+    'accurately handling webpages',
+    'considering bible version',
+    'humming to holy tunes',
+    'staying awake',
+    'clapping hands'
+]
 export const BOOKS = [
     'Genesis',
     'Exodus',
@@ -135,3 +162,5 @@ export const CHAPTERS = {
 "Jude" : 1,
 "Revelation" : 22
 };
+
+export const BLACKLIST = ['and','its','but','weighs','heart','over','god','things','years','set','kinds', 'the','had','among','even', 'went','shall','from','him','any','will','our','have','because','accordingly','though','required','sake','through','who','those','are','you','your','about','with','all','not','for','hovering','has','overcome','gathered','under','face','midst','bearing','which','were','saw','said','one','spirit','together','so','first','second','separated','separate', 'form','forth', 'there','kind','day','rule','expanse','deep','was','beginning','that','let','called','without','darkness','void','into','lie','according','them','place',]

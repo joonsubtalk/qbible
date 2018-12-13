@@ -4,6 +4,8 @@ import Hammer from 'react-hammerjs';
 import {incrementVerse, decrementVerse, setVerse} from '../../actions/verseAC';
 import { getPictureThunk } from '../../actions/picAC';
 import Progress from '../Progress/Progress';
+import { BLACKLIST } from '../../data/variables';
+import { shuffle } from '../../config/utils';
 
 const LoadingGram = () => {
 	return (<div className="c-gram">
@@ -30,6 +32,73 @@ class Gram extends Component {
 		keywords : []
 	}
 
+	componentDidMount() {
+		const {posts, id} = this.props;
+		const {book, chapter, activeVerse} = posts[id];
+		// preloadAFewImage
+		// getMaxChapter
+
+		this.loadAllVersesInChapter(book, chapter);
+		this.loadActiveVerse(id, activeVerse);
+		this.loadImageForVerse(id, book, chapter, activeVerse);
+	}
+
+	createCommaSeparatedQuery = (id, book, chapter, verse) => {
+
+		const {bible} = this.props;
+		const text = (bible.bible[book][chapter][verse]).toLowerCase();
+		const wordsArr = text.split(' ');
+		const possibleSearchQueryList = wordsArr.filter((word)=> {
+			return word.replace(/[^a-zA-Z ]/g, '').length > 2
+				&& !BLACKLIST.includes(word.replace(/[^a-zA-Z ]/g, ''))
+		});
+
+		// mix it up
+		shuffle(possibleSearchQueryList);
+		let queryArr = [];
+		
+		possibleSearchQueryList.some((search, idx) => {
+			if (idx > 3) return;
+			queryArr.push(search.replace(/[^a-zA-Z ]/g, ""));
+		})
+
+
+		// remove the chaff
+		const uniqueQueryArray = queryArr.filter(function(item, pos) {
+			return queryArr.indexOf(item) === pos;
+		})
+		const query = uniqueQueryArray.join(',');
+
+		return query;
+	}
+
+	loadImageForVerse = (id, book, chapter, verse) => {
+		const query = this.createCommaSeparatedQuery(id, book, chapter, verse);
+		this.props.getPicture({
+			book,
+			chapter,
+			verse,
+			query: query,
+		})
+	}
+
+	loadActiveVerse = (id, verse) => {
+		this.props.setVerse({id, activeVerse : verse});
+	}
+
+	loadAllVersesInChapter = (book, chapter, verse=1) => {
+		const {bible} = this.props;
+		const chapterObj = bible.bible[book][chapter];
+		let chapterArray = [];
+
+		for (let i = 1; i <= Object.keys(chapterObj).length; i++) {
+			chapterArray.push(chapterObj[i]);
+		}
+		this.setState({chapterArr: chapterArray});
+	}
+
+	//
+
 	toggleContextHandler = () => {
 		this.setState(prevState => ({
 			showContext: !prevState.showContext
@@ -41,7 +110,6 @@ class Gram extends Component {
 	}
 
 	nextVerse = () => {
-		const BLACKLIST = ['and','its','but','weighs','heart','over','god','things','years','set','kinds', 'the','had','among','even', 'went','shall','from','him','any','will','our','have','because','accordingly','though','required','sake','through','who','those','are','you','your','about','with','all','not','for','hovering','has','overcome','gathered','under','face','midst','bearing','which','were','saw','said','one','spirit','together','so','first','second','separated','separate', 'form','forth', 'there','kind','day','rule','expanse','deep','was','beginning','that','let','called','without','darkness','void','into','lie','according','them','place',]
 		const {id, bible, posts} = this.props;
 		const {chapter, verse, book} = posts.post[id];
 		const text = (bible.bible[book][chapter][verse+1]).toLowerCase();
@@ -80,23 +148,31 @@ class Gram extends Component {
 	}
 
 	render() {
-		const { title, text, image, id, posts, bible } = this.props;
+		const { pics, id, posts, bible } = this.props;
+		const {chapter, verse, book} = posts[id];
+		const text = bible.bible[book][chapter][verse];
 		let modifiers = '';
-		const imageURL = posts
-			? posts.post[id].pic
-			: image
+
+		const imageURL = pics.isPicLoaded && pics.pictures[book] && pics.pictures[book][chapter]
+			? pics.pictures[book][chapter][verse].pic
+			: '';
+		const tags = pics.isPicLoaded && pics.pictures[book] && pics.pictures[book][chapter]
+			? pics.pictures[book][chapter][verse].query
+			: '';
 		const rando = Math.floor(Math.random()*6);
 
-		if (text.length < 75) {
-			modifiers = 'c-gram--tiny';
-		}
-		else if (text.length < 150) {
-			modifiers = 'c-gram--small';
-		}
-		else if (text.length < 300) {
-			modifiers = 'c-gram--medium';
-		} else {
-			modifiers = 'c-gram--long';
+		if (text) {
+			if (text.length < 75) {
+				modifiers = 'c-gram--tiny';
+			}
+			else if (text.length < 150) {
+				modifiers = 'c-gram--small';
+			}
+			else if (text.length < 300) {
+				modifiers = 'c-gram--medium';
+			} else {
+				modifiers = 'c-gram--long';
+			}
 		}
 
 		modifiers += ` c-gram--font${rando}`;
@@ -105,8 +181,8 @@ class Gram extends Component {
 		return (
 			<div className={`c-gram ${modifiers}`}>
 				<div className="c-gram__container">
-					<div className="c-gram__title">{title}</div>
-					{ posts.post[id].isPicLoading 
+					<div className="c-gram__title">{'title'}</div>
+					{ posts[id].isPicLoading 
 						? (	<LoadingGram /> )
 						: (<Hammer onSwipeLeft={this.nextVerse}
 							onSwipeRight={() => {this.props.decrementVerse(id)}}>
@@ -123,7 +199,7 @@ class Gram extends Component {
 					}
 					<div className="c-gram__seeMore">
 						<div>
-							{posts.post[id].book} {posts.post[id].chapter}:{posts.post[id].verse} {this.state.keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}
+							{posts[id].book} {posts[id].chapter}:{posts[id].verse} {tags} {this.state.keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}
 						</div>
 						<button onClick={this.toggleContextHandler}>
 						{ !this.state.showContext
@@ -136,7 +212,7 @@ class Gram extends Component {
 						? (
 							this.state.chapterArr.map((chapter, idx)=> {
 								let additionalClasses = '';
-								if (idx + 1 === posts.post[id].verse)
+								if (idx + 1 === posts[id].verse)
 									additionalClasses = 'c-gram--current';
 								return <div key={idx} className={`c-gram__verseLine ${additionalClasses}`} onClick={()=>{this.verseJumpHandler(idx+1)}}><span className={`c-gram__verse ${additionalClasses}`}>{idx+1}</span> {chapter}</div>
 							})
@@ -152,8 +228,9 @@ class Gram extends Component {
 
 function mSTP(state) {
 	return {
-		posts : state.posts,
-		bible : state.bible
+		posts : state.posts.post,
+		bible : state.bible,
+		pics : state.pics
 	};
 
 }

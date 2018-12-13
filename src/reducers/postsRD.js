@@ -55,11 +55,10 @@ function postsRD(state = defaultState , action ) {
 		}
 
 		case SET_VERSE: {
-			console.log('hi')
 			return {
 				...state,
 				post: state.post.map((single, i) => i === action.payload.id
-					? {...single, verse: action.payload.verse}
+					? {...single, activeVerse: action.payload.activeVerse}
 					: single
 				)
 			}
