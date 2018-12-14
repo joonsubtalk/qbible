@@ -21,9 +21,11 @@ export const WITTY_LOADER = [
     'filling database with holy spirit',
     'accurately handling webpages',
     'considering bible version',
-    'humming to holy tunes',
-    'staying awake',
-    'clapping hands'
+    'humming holy tunes',
+    'forming digital womb',
+    'clapping hands',
+    'looking up what MOG stands for',
+    'surfing babylon bee'
 ]
 export const BOOKS = [
     'Genesis',

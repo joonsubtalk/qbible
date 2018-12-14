@@ -47,8 +47,8 @@ export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch)
 
 	return fetch(url)
 		.then((data) => {
-			const {book, chapter, verse, query} = payload;
-			return dispatch(getPictureSuccess({book, chapter, verse, query, pic: data.url}));
+			const {book, chapter, verse, query, fontChoice} = payload;
+			return dispatch(getPictureSuccess({book, chapter, verse, query, pic: data.url, fontChoice}));
 		})
 		.catch((error) => {
 			console.log('fail');

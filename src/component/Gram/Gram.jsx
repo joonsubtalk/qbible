@@ -40,7 +40,8 @@ class Gram extends Component {
 
 		this.loadAllVersesInChapter(book, chapter);
 		this.loadActiveVerse(id, activeVerse);
-		this.loadImageForVerse(id, book, chapter, activeVerse);
+		// this.loadImageForVerse(id, book, chapter, activeVerse);
+		this.lookAheadLoadImage(id, book, chapter, activeVerse);
 	}
 
 	createCommaSeparatedQuery = (id, book, chapter, verse) => {
@@ -73,13 +74,40 @@ class Gram extends Component {
 	}
 
 	loadImageForVerse = (id, book, chapter, verse) => {
+		const {pictures, isPicLoaded} = this.props.pics;
+		if (isPicLoaded && pictures[book][chapter][verse] !== undefined)
+			return;
+
+		const fontChoice = Math.floor(Math.random()*6);
 		const query = this.createCommaSeparatedQuery(id, book, chapter, verse);
 		this.props.getPicture({
 			book,
 			chapter,
 			verse,
 			query: query,
+			fontChoice
 		})
+	}
+
+	lookAheadLoadImage = (id, book, chapter, activeVerse) => {
+		
+		const {pictures, isPicLoaded} = this.props.pics;
+		let fontChoice = 0;
+		let query = '';
+		for (let verse = activeVerse; verse <= 5; verse++){
+			if (isPicLoaded && pictures[book][chapter][verse] !== undefined)
+			return;
+
+			fontChoice = Math.floor(Math.random()*6);
+			query = this.createCommaSeparatedQuery(id, book, chapter, verse);
+			this.props.getPicture({
+				book,
+				chapter,
+				verse,
+				query: query,
+				fontChoice
+			})
+		}
 	}
 
 	loadActiveVerse = (id, verse) => {
@@ -97,49 +125,17 @@ class Gram extends Component {
 		this.setState({chapterArr: chapterArray});
 	}
 
-	//
+	nextVerse = () => {
+		const {posts, id} = this.props;
+		const {book, chapter, activeVerse} = posts[id];
+		this.props.incrementVerse(id);
+		this.loadImageForVerse(id, book, chapter, activeVerse+1);
+	}
 
 	toggleContextHandler = () => {
 		this.setState(prevState => ({
 			showContext: !prevState.showContext
 		}));
-
-		if (this.props.bible.isBibleLoaded && this.state.chapterArr.length === 0) {
-			this.setupChapterContext()
-		}
-	}
-
-	nextVerse = () => {
-		const {id, bible, posts} = this.props;
-		const {chapter, verse, book} = posts.post[id];
-		const text = (bible.bible[book][chapter][verse+1]).toLowerCase();
-		const words = text.split(' ');
-		const search = words.filter((word)=>word.replace(/[^a-zA-Z ]/g, "").length > 2 && !BLACKLIST.includes(word.replace(/[^a-zA-Z ]/g, "")))
-		const contextual1 = search[Math.floor(Math.random()*search.length)].replace(/[^a-zA-Z ]/g, "");
-		const contextual2 = search[Math.floor(Math.random()*search.length)].replace(/[^a-zA-Z ]/g, "");
-		const contextual3 = search[Math.floor(Math.random()*search.length)].replace(/[^a-zA-Z ]/g, "");
-		const contextual4 = search[Math.floor(Math.random()*search.length)].replace(/[^a-zA-Z ]/g, "");
-		const queryArr = [contextual1, contextual2, contextual3, contextual4];
-		const uniqueQueryArray = queryArr.filter(function(item, pos) {
-			return queryArr.indexOf(item) === pos;
-		})
-		const query = uniqueQueryArray.join(',');
-		this.props.incrementVerse(id);
-
-		this.setState({keywords : uniqueQueryArray})
-		this.props.getPicture({id: id, query : query});
-	}
-
-	setupChapterContext = () => {
-		const { id, posts, bible } = this.props;
-		const {book, chapter} = posts.post[id];
-		let chapterArr = [];
-		let chapterObj = {}
-		chapterObj = bible.bible[book][chapter];
-		for (let i = 1; i <= Object.keys(chapterObj).length; i++) {
-			chapterArr.push(chapterObj[i]);
-		}
-		this.setState({chapterArr: chapterArr});
 	}
 
 	verseJumpHandler = (verse) => {
@@ -149,17 +145,23 @@ class Gram extends Component {
 
 	render() {
 		const { pics, id, posts, bible } = this.props;
-		const {chapter, verse, book} = posts[id];
-		const text = bible.bible[book][chapter][verse];
-		let modifiers = '';
+		const {chapter, activeVerse, book} = posts[id];
+		const text = bible.bible[book][chapter][activeVerse];
+		const postInfo = pics.isPicLoaded
+			&& pics.pictures[book]
+			&& pics.pictures[book][chapter]
+			&& pics.pictures[book][chapter][activeVerse];
+		const imageURL = postInfo
+			? postInfo.pic
+			: '';
+		const tags = postInfo
+			? postInfo.query
+			: '';
 
-		const imageURL = pics.isPicLoaded && pics.pictures[book] && pics.pictures[book][chapter]
-			? pics.pictures[book][chapter][verse].pic
+		const font = postInfo
+			? postInfo.fontChoice
 			: '';
-		const tags = pics.isPicLoaded && pics.pictures[book] && pics.pictures[book][chapter]
-			? pics.pictures[book][chapter][verse].query
-			: '';
-		const rando = Math.floor(Math.random()*6);
+		let modifiers = '';
 
 		if (text) {
 			if (text.length < 75) {
@@ -175,14 +177,14 @@ class Gram extends Component {
 			}
 		}
 
-		modifiers += ` c-gram--font${rando}`;
+		modifiers += ` c-gram--font${font}`;
 		if (this.state.showContext)
 			modifiers += ` c-gram--showContext`;
 		return (
 			<div className={`c-gram ${modifiers}`}>
 				<div className="c-gram__container">
-					<div className="c-gram__title">{'title'}</div>
-					{ posts[id].isPicLoading 
+					<div className="c-gram__title">{book} {chapter}</div>
+					{ pics.isPicLoading 
 						? (	<LoadingGram /> )
 						: (<Hammer onSwipeLeft={this.nextVerse}
 							onSwipeRight={() => {this.props.decrementVerse(id)}}>
@@ -199,7 +201,7 @@ class Gram extends Component {
 					}
 					<div className="c-gram__seeMore">
 						<div>
-							{posts[id].book} {posts[id].chapter}:{posts[id].verse} {tags} {this.state.keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}
+							{posts[id].book} {posts[id].chapter}:{posts[id].activeVerse} {tags} {this.state.keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}
 						</div>
 						<button onClick={this.toggleContextHandler}>
 						{ !this.state.showContext
@@ -212,7 +214,7 @@ class Gram extends Component {
 						? (
 							this.state.chapterArr.map((chapter, idx)=> {
 								let additionalClasses = '';
-								if (idx + 1 === posts[id].verse)
+								if (idx + 1 === posts[id].activeVerse)
 									additionalClasses = 'c-gram--current';
 								return <div key={idx} className={`c-gram__verseLine ${additionalClasses}`} onClick={()=>{this.verseJumpHandler(idx+1)}}><span className={`c-gram__verse ${additionalClasses}`}>{idx+1}</span> {chapter}</div>
 							})

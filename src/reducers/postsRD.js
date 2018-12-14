@@ -35,7 +35,7 @@ function postsRD(state = defaultState , action ) {
 			return {
 				...state,
 				post: state.post.map((single, i) => i === action.payload
-					? {...single, verse: state.post[action.payload].verse+1}
+					? {...single, activeVerse: state.post[action.payload].activeVerse+1}
 					: single
 				)
 			}
@@ -46,8 +46,8 @@ function postsRD(state = defaultState , action ) {
 
 			return {
 				...state,
-				post: state.post.map((single, i) => i === action.payload && state.post[action.payload].verse > 1
-					? {...single, verse: state.post[action.payload].verse-1}
+				post: state.post.map((single, i) => i === action.payload && state.post[action.payload].activeVerse > 1
+					? {...single, activeVerse: state.post[action.payload].activeVerse-1}
 					: single
 				)
 			}
