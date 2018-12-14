@@ -54,6 +54,21 @@
     &__context {
         display: none;
     }
+    &__keywords {
+        color: #777;
+    }
+    &__seeMoreIcon {
+        position: relative;
+        top: 0.25em;
+    }
+    &__gramInfo {
+        padding-bottom: 1em;
+    }
+    &__seeMoreButton {
+        border: none;
+        float: right;
+        background-color: #fff;
+    }
 }
 
 .c-gram--showContext {

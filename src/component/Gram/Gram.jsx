@@ -81,6 +81,7 @@ class Gram extends Component {
 		const fontChoice = Math.floor(Math.random()*6);
 		const query = this.createCommaSeparatedQuery(id, book, chapter, verse);
 		this.props.getPicture({
+			id,
 			book,
 			chapter,
 			verse,
@@ -101,6 +102,7 @@ class Gram extends Component {
 			fontChoice = Math.floor(Math.random()*6);
 			query = this.createCommaSeparatedQuery(id, book, chapter, verse);
 			this.props.getPicture({
+				id,
 				book,
 				chapter,
 				verse,
@@ -157,6 +159,7 @@ class Gram extends Component {
 		const tags = postInfo
 			? postInfo.query
 			: '';
+		const keywords = tags.split(',');
 
 		const font = postInfo
 			? postInfo.fontChoice
@@ -184,7 +187,7 @@ class Gram extends Component {
 			<div className={`c-gram ${modifiers}`}>
 				<div className="c-gram__container">
 					<div className="c-gram__title">{book} {chapter}</div>
-					{ pics.isPicLoading 
+					{ posts[id].isPicLoading 
 						? (	<LoadingGram /> )
 						: (<Hammer onSwipeLeft={this.nextVerse}
 							onSwipeRight={() => {this.props.decrementVerse(id)}}>
@@ -200,13 +203,17 @@ class Gram extends Component {
 						)
 					}
 					<div className="c-gram__seeMore">
-						<div>
-							{posts[id].book} {posts[id].chapter}:{posts[id].activeVerse} {tags} {this.state.keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}
+						<div className="c-gram__gramInfo">
+							{posts[id].book} {posts[id].chapter}:{posts[id].activeVerse} <span className="c-gram__keywords">{keywords.map((keyword, idx)=> <span key={`${idx}${keyword}`}>#{keyword}</span>)}</span>
 						</div>
-						<button onClick={this.toggleContextHandler}>
+						<button className="c-gram__seeMoreButton" onClick={this.toggleContextHandler}>
 						{ !this.state.showContext
-							? 'See context'
-							: 'less context'
+							? <div>
+								<svg viewBox="0 0 9.64797592163086 5.574477195739746" className="svg c-gram__seeMoreIcon" width="100%" height="100%"><path d="M4.823 5.574a.744.744 0 0 1-.53-.22l-4-4A.75.75 0 1 1 1.354.293l3.47 3.47 3.47-3.47a.75.75 0 1 1 1.061 1.061l-4 4a.752.752 0 0 1-.532.22z"></path></svg> See context
+							</div>
+							: <div>
+								<svg viewBox="0 0 9.633416175842285 5.647106170654297" className="svg c-gram__seeMoreIcon" width="100%" height="100%"><path d="M8.824 5.574a.744.744 0 0 1-.53-.22l-3.47-3.47-3.47 3.47a.75.75 0 1 1-1.061-1.06l4-4a.75.75 0 0 1 1.061 0l4 4a.75.75 0 0 1-.53 1.28z"></path></svg> Less context
+							</div>
 						}
 						</button>
 					{

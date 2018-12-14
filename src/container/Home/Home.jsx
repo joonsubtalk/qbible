@@ -5,11 +5,17 @@ import Gram from '../../component/Gram/Gram';
 class Home extends Component {
 
 	componentDidMount() {
-		const { plans, activePlan, posts } = this.props;
+		const { plans, activePlan, posts, bible } = this.props;
 
 		if (posts.length === 0) {
 			plans[activePlan].plan.map((plan)=> {
-				this.props.populatePost(plan)
+				const chapterObj = bible[plan.book][plan.chapter];
+
+				const newPlan = {
+					...plan,
+					maxVerse: Object.keys(chapterObj).length
+				}
+				this.props.populatePost(newPlan)
 			});
 		}
 	}
@@ -17,7 +23,7 @@ class Home extends Component {
 	render() {
 		const { posts } = this.props;
 		return (
-			<div>
+			<div className="o-home">
 				{posts.map((post, idx) => {
 					return <Gram key={post.book} id={idx} />
 				})}
@@ -30,6 +36,7 @@ function mSTP(state) {
 	return {
 		posts : state.posts.post,
 		plans : state.bible.biblePlan,
+		bible : state.bible.bible,
 		activePlan : state.bible.selectedBiblePlan,
 	};
 

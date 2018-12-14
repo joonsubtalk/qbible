@@ -4,7 +4,6 @@ import { GET_PIC_REQUEST,
 	} from '../config/actionTypes';
 
 export const getPictureRequest = (payload) => {
-
 	return {
 		type : GET_PIC_REQUEST,
 		payload
@@ -39,7 +38,7 @@ payload:
 */
 export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch) {
 
-	dispatch(getPictureRequest());
+	dispatch(getPictureRequest(payload));
 
 	const height = Math.floor(400);
 	const width = Math.floor(400);
@@ -47,8 +46,8 @@ export const getPictureThunk = (payload) => function getPictureThunkCb(dispatch)
 
 	return fetch(url)
 		.then((data) => {
-			const {book, chapter, verse, query, fontChoice} = payload;
-			return dispatch(getPictureSuccess({book, chapter, verse, query, pic: data.url, fontChoice}));
+			const {book, chapter, verse, query, fontChoice, id} = payload;
+			return dispatch(getPictureSuccess({id, book, chapter, verse, query, pic: data.url, fontChoice}));
 		})
 		.catch((error) => {
 			console.log('fail');

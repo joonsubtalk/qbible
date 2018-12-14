@@ -4,6 +4,7 @@ import { INCREMENT_VERSE,
 	ADD_POST,
 	GET_PIC_SUCCESS,
 	GET_PIC_REQUEST,
+	GET_PIC_FAILURE,
  } from '../config/actionTypes';
 
 export const defaultState = {
@@ -66,10 +67,9 @@ function postsRD(state = defaultState , action ) {
 		}
 
 		case GET_PIC_REQUEST: {
-
 			return {
 				...state,
-				post: state.post.map((single, i) => i === action.payload
+				post: state.post.map((single, i) => i === action.payload.id
 					? {...single, isPicLoading: true}
 					: single
 				)
@@ -80,7 +80,7 @@ function postsRD(state = defaultState , action ) {
 			return {
 				...state,
 				post: state.post.map((single, i) => i === action.payload.id
-					? {...single, isPicLoading: false, pic: action.payload.pic}
+					? {...single, isPicLoading: false}
 					: single
 				)
 			}

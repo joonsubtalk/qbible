@@ -6,6 +6,7 @@
 @import './src/component/Progress/Progress.scss';
 @import './src/component/Queue/Queue.scss';
 @import './src/component/Loader/Loader.scss';
+@import './src/container/Home/Home.scss';
 
 
 body {
@@ -21,4 +22,10 @@ body {
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+.svg {
+  fill: black;
+  width: 1em;
+  height: 1em;
 }
