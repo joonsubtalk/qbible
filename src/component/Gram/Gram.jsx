@@ -95,7 +95,11 @@ class Gram extends Component {
 		const {pictures, isPicLoaded} = this.props.pics;
 		let fontChoice = 0;
 		let query = '';
-		for (let verse = activeVerse; verse <= 5; verse++){
+		for (let verse = activeVerse; verse <= activeVerse+5; verse++){
+			// is there even a verse for it to load?
+			if (verse > this.props.posts[id].maxVerse)	return;
+
+			// no need if already loaded
 			if (isPicLoaded && pictures[book][chapter][verse] !== undefined)
 			return;
 
@@ -128,10 +132,13 @@ class Gram extends Component {
 	}
 
 	nextVerse = () => {
-		const {posts, id} = this.props;
+		const {posts, id, pics} = this.props;
 		const {book, chapter, activeVerse} = posts[id];
+		if (activeVerse+1 > this.props.posts[id].maxVerse)	return;
 		this.props.incrementVerse(id);
 		this.loadImageForVerse(id, book, chapter, activeVerse+1);
+		if (pics.pictures[book][chapter][activeVerse+3]) return;
+		this.lookAheadLoadImage(id, book, chapter, activeVerse+3);
 	}
 
 	toggleContextHandler = () => {
@@ -141,8 +148,14 @@ class Gram extends Component {
 	}
 
 	verseJumpHandler = (verse) => {
-		this.props.setVerse({id: this.props.id, verse: verse-1});
-		this.nextVerse();
+		const { pics, id, posts } = this.props;
+		const {pictures, isPicLoaded} = pics;
+		const {chapter, book} = posts[id];
+		
+		this.props.setVerse({id, activeVerse: verse});
+		// no need to get pic if already loaded
+		if (isPicLoaded && pictures[book][chapter][verse] !== undefined) return;
+		this.loadImageForVerse(id, book, chapter, verse);
 	}
 
 	render() {

@@ -9,7 +9,7 @@ export default class Loader extends Component {
 		selectedWit : 0,
 		wittyInterval : null,
 		refreshing : true,
-		witAwait : 900
+		witAwait : 875
 	}
 
 	componentDidMount() {

@@ -126,7 +126,7 @@ export const getBibleThunk = () => function getBibleThunkCb(dispatch) {
 	setTimeout(()=>{
 		console.log('change me in productions!');
 		dispatch(getBibleSuccess(data));
-	}, Math.floor((Math.random()*2000)+200));
+	}, Math.floor((Math.random()*2000)+1000));
 
 	// return fetch('./data/esv.json')
 	// 	.then(response => response.json())

@@ -1,6 +1,6 @@
 export const READ_PLAN = [
     {'book':'Genesis','chapter': 1,'verse': 1,'activeVerse': 1},
-    {'book':'Proverbs','chapter': 1,'verse': 1,'activeVerse': 1},
+    {'book':'Proverbs','chapter': 14,'verse': 1,'activeVerse': 1},
     {'book':'Matthew','chapter': 1,'verse': 1,'activeVerse': 1}
 ]
 export const WITTY_LOADER = [
@@ -24,7 +24,26 @@ export const WITTY_LOADER = [
     'humming holy tunes',
     'forming digital womb',
     'clapping hands',
-    'looking up what MOG stands for',
+    'downvoting the prodigal son',
+    'removing stumbling blocks',
+    'casting the second stone',
+    'preparing triumphal data entry',
+    'bribing tax collector',
+    'sending out the 12 bytes',
+    'burning a CD sacrifice',
+    'deleting old self',
+    'listening to a sermon',
+    'thinking of hashtags',
+    'scolding lost lamb',
+    'pruning vines',
+    'aligning out of context posts',
+    'checking commentaries',
+    'asking a seminary student',
+    'growing a beard',
+    'wearing a cardigan',
+    'listening to a dating series',
+    'waiting in the doughnut line',
+    'looking for a parking space',
     'surfing babylon bee'
 ]
 export const BOOKS = [
